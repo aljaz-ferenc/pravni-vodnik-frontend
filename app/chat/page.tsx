@@ -1,11 +1,29 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { SendHorizonal } from "lucide-react";
 import Sources from "./_components/Sources";
+import { getResponse } from "@/lib/actions";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default async function ChatPage(props: PageProps<"/chat">) {
-  const { searchParams } = props;
-  const { query } = await searchParams;
+export default function ChatPage() {
+  const sp = useSearchParams();
+  const query = sp.get("query") || "";
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    if (messages.length || !query) return;
+
+    async function fetchData() {
+      const response = await getResponse(query);
+      console.log(response);
+      setMessages([response]);
+    }
+
+    fetchData();
+  }, [messages, query]);
 
   return (
     <main className="flex-1 relative flex flex-col min-h-screen">
