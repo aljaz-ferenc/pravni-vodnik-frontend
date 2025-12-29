@@ -35,7 +35,7 @@ export default function Home() {
           <QueryInput />
           <div className="mt-8">
             <div className="flex items-center justify-between mb-4 px-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                 <MdOutlineTune size={15} />
                 Izberite vir zakonodaje
               </span>
@@ -56,9 +56,9 @@ export default function Home() {
                 </SelectTrigger>
               </Select>
             </div>
-            <div className="flex items-center gap-2 mt-5 px-2 pt-4 border-t border-white/5">
+            <div className="flex items-center gap-2 mt-5 px-2 pt-4 border-t border-border">
               <BsInfoCircleFill color="var(--color-slate-500)" size={15} />
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 Izbrano področje določa kontekst za iskanje. Če izberete{" "}
                 <strong>Vsa zakonodaja</strong>, bo sistem preiskal celoten
                 pravni spekter za najširši možni odgovor.
