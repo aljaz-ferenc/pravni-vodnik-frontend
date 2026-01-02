@@ -29,8 +29,8 @@ export default function QueryInput() {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const query = data.query.trim();
     try {
-      const documentId = await queryRAG(query);
-      router.push(`/documents/${documentId}`);
+      const response = await queryRAG(query);
+      router.push(`/documents/${response.documentId}?version=1`);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(err.message);
