@@ -29,13 +29,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
       >
         {children}
-        <footer className="fixed bottom-0 w-full py-4 text-center border-t border-white/5 bg-background-dark/80 backdrop-blur-sm z-40">
+        {/* <footer className="fixed bottom-0 w-full py-4 text-center border-t border-white/5 bg-background-dark/80 backdrop-blur-sm z-40">
           <p className="text-xs text-slate-600 flex items-center justify-center gap-2">
             <GoAlertFill size={15} />
             Pravni Vodnik ne nadomešča pravnega nasveta. Vedno se posvetujte s
             strokovnjakom.
           </p>
-        </footer>
+        </footer> */}
       </body>
     </html>
   );
