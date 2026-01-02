@@ -60,3 +60,14 @@ export async function getAllDocuments() {
 
   return articles;
 }
+
+export async function deleteDocument(documentId: string) {
+  const client = await clientPromise;
+  const db = client.db("pravni-vodnik");
+  const col = await db.collection<Document>("documents");
+  const result = await col.findOneAndDelete({ _id: new ObjectId(documentId) });
+
+  if (result?._id) throw new Error("Dokumenta ni bilo mogoče najti");
+
+  return result?._id;
+}
