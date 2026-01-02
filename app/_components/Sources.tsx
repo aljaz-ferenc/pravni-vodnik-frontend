@@ -8,7 +8,7 @@ import {
 import { lawIdMap } from "@/lib/lawIdMap";
 import { lawUrls } from "@/lib/lawUrls";
 import type { Article } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { cn, groupdSourcesByLaw } from "@/lib/utils";
 import { Gavel } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -20,7 +20,7 @@ type SourcesProps = {
 };
 
 export default function Sources({ sources }: SourcesProps) {
-  const groupedSources = Object.groupBy(sources, (s) => s.law_id);
+  const groupedSources = groupdSourcesByLaw(sources);
 
   return (
     <aside className="bg-slate-900/40 flex flex-col">

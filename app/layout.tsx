@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { GoAlertFill } from "react-icons/go";
+import { Toaster } from "@/components/ui/sonner";
+import Navigation from "./_components/Navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +30,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
       >
+        <Navigation />
+        <Toaster />
         {children}
         {/* <footer className="fixed bottom-0 w-full py-4 text-center border-t border-white/5 bg-background-dark/80 backdrop-blur-sm z-40">
           <p className="text-xs text-slate-600 flex items-center justify-center gap-2">

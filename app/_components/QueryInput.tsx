@@ -3,10 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
+import { queryRAG } from "@/lib/actions";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 const formSchema = z.object({
@@ -24,14 +26,23 @@ export default function QueryInput() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     const query = data.query.trim();
-    router.push(`/chat?query=${encodeURIComponent(query)}`);
+    try {
+      const documentId = await queryRAG(query);
+      router.push(`/documents/${documentId}`);
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Nekaj je šlo narobe. Poskusite ponovno.");
+      }
+    }
   }
 
   return (
     <div className="relative flex w-full items-center border border-border focus-within:border-primary ring-1 ring-border focus-within:ring-primary/30 rounded-2xl transition-all shadow-2xl shadow-black/50 overflow-hidden">
-      <form {...form} onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <Controller
           name="query"
           control={form.control}

@@ -9,6 +9,7 @@ export type DocumentVersion = {
 
 export type Document = {
   versions: DocumentVersion[];
+  _id: ObjectId;
 };
 
 export type Article = {
