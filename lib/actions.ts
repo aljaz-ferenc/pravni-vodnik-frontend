@@ -3,6 +3,7 @@
 import { ObjectId } from "mongodb";
 import clientPromise from "./mongo";
 import type { Article, Document } from "./types";
+import { updateTag } from "next/cache";
 
 const BASE_URL = process.env.BASE_URL || "http://localhost:8000";
 
@@ -25,6 +26,7 @@ export async function queryRAG(
     throw new Error("Nekaj je šlo narobe. Poskusite ponovno.");
   }
   const data = await response.json();
+  updateTag("documents");
   return data;
 }
 
@@ -36,7 +38,7 @@ export async function getDocument(documentId: string) {
 
   if (!document) throw new Error("Dokument ne obstaja");
 
-  return document;
+  return JSON.parse(JSON.stringify(document));
 }
 
 export async function getArticles(ids: string[]) {
@@ -67,7 +69,6 @@ export async function deleteDocument(documentId: string) {
   const col = await db.collection<Document>("documents");
   const result = await col.findOneAndDelete({ _id: new ObjectId(documentId) });
 
-  if (result?._id) throw new Error("Dokumenta ni bilo mogoče najti");
-
-  return result?._id;
+  updateTag("documents");
+  return result?._id.toString();
 }

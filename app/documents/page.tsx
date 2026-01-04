@@ -1,8 +1,11 @@
 import { getAllDocuments } from "@/lib/actions";
 
-import Document from "./_components/Document";
+import DocumentsListItem from "./_components/DocumentsListItem";
+import { cacheTag } from "next/cache";
 
 export default async function DocumentsPage() {
+  "use cache";
+  cacheTag("documents");
   const documents = await getAllDocuments();
 
   return (
@@ -27,7 +30,7 @@ export default async function DocumentsPage() {
         <div className="flex-1 overflow-y-auto">
           <ul className="divide-y divide-muted-foreground">
             {documents.map((doc) => (
-              <Document key={doc._id.toString()} document={doc} />
+              <DocumentsListItem key={doc._id.toString()} document={doc} />
             ))}
           </ul>
         </div>

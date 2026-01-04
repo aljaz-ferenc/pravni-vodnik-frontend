@@ -20,7 +20,7 @@ type DocumentProps = {
   document: TDocument;
 };
 
-export default function Document({ document }: DocumentProps) {
+export default function DocumentsListItem({ document }: DocumentProps) {
   const lastVersion = document.versions.at(-1);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -28,6 +28,7 @@ export default function Document({ document }: DocumentProps) {
   function onDelete() {
     startTransition(async () => {
       try {
+        console.log("deleting: ", document._id);
         await deleteDocument(document._id.toString());
         setDeleteDialogOpen(false);
       } catch (err) {
