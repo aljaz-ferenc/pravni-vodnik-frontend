@@ -1,9 +1,9 @@
 "use server";
 
 import { ObjectId } from "mongodb";
+import { updateTag } from "next/cache";
 import clientPromise from "./mongo";
 import type { Article, Document } from "./types";
-import { updateTag } from "next/cache";
 
 const BASE_URL = process.env.BASE_URL || "http://localhost:8000";
 

@@ -1,11 +1,11 @@
-import FollowUp from "@/app/_components/FollowUp";
-import Header from "@/app/_components/Header";
-import Sources from "@/app/_components/Sources";
-import { getArticles, getDocument } from "@/lib/actions";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import FollowUp from "@/app/_components/FollowUp";
+import Header from "@/app/_components/Header";
+import Sources from "@/app/_components/Sources";
+import { getArticles, getDocument } from "@/lib/actions";
 
 export async function generateMetadata({
   params,

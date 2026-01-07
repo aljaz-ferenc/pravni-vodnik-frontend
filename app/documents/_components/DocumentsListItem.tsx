@@ -1,5 +1,9 @@
 "use client";
 
+import { X } from "lucide-react";
+import Link from "next/link";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,10 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import { deleteDocument } from "@/lib/actions";
 import type { Document as TDocument } from "@/lib/types";
-import { X } from "lucide-react";
-import Link from "next/link";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
 
 type DocumentProps = {
   document: TDocument;

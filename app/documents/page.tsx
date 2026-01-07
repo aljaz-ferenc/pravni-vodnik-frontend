@@ -1,7 +1,6 @@
-import { getAllDocuments } from "@/lib/actions";
-
-import DocumentsListItem from "./_components/DocumentsListItem";
 import { cacheTag } from "next/cache";
+import { getAllDocuments } from "@/lib/actions";
+import DocumentsListItem from "./_components/DocumentsListItem";
 
 export default async function DocumentsPage() {
   "use cache";

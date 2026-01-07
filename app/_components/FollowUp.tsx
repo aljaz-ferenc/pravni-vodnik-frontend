@@ -1,6 +1,6 @@
 export default function FollowUp() {
   return (
-    <div className="p-5">
+    <div className="p-5 border-b">
       <div className="bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-border  p-1.5 shadow-sm">
         <div className="p-3">
           <label

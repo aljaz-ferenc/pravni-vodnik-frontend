@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { GoAlertFill } from "react-icons/go";
 import { Toaster } from "@/components/ui/sonner";
 import Navigation from "./_components/Navigation";
 

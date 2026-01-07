@@ -13,7 +13,7 @@ export type Document = {
 };
 
 export type Article = {
-  _id: ObjectId;
+  _id: string;
   law_id: string;
   article_number: string;
   article_index: number;

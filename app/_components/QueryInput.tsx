@@ -1,15 +1,14 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { queryRAG } from "@/lib/actions";
-import { ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
-
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
 
 const formSchema = z.object({
   query: z

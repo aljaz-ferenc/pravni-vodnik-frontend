@@ -1,19 +1,14 @@
 "use client";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { lawIdMap } from "@/lib/lawIdMap";
-import { lawUrls } from "@/lib/lawUrls";
-import type { Article } from "@/lib/types";
-import { cn, groupdSourcesByLaw } from "@/lib/utils";
 import { Gavel } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { IoBookSharp } from "react-icons/io5";
 import { MdOpenInNew } from "react-icons/md";
+import { lawIdMap } from "@/lib/lawIdMap";
+import { lawUrls } from "@/lib/lawUrls";
+import type { Article } from "@/lib/types";
+import { cn, groupdSourcesByLaw } from "@/lib/utils";
 
 type SourcesProps = {
   sources: Article[];
@@ -74,6 +69,7 @@ type SourceProps = {
 
 function Source({ source }: SourceProps) {
   const [expanded, setExpanded] = useState(false);
+  const paragraphs = source.text.split("\n");
 
   return (
     <button
@@ -89,14 +85,31 @@ function Source({ source }: SourceProps) {
               Člen {source.article_number}
             </span>
           </div>
-          <p
-            className={cn(
-              "text-xs text-slate-600 dark:text-slate-400 font-mono leading-relaxed",
-              !expanded && "line-clamp-1",
-            )}
-          >
-            {source.text}
-          </p>
+          {!expanded && (
+            <p
+              className={cn(
+                "text-xs text-slate-600 dark:text-slate-400 font-mono leading-relaxed",
+                !expanded && "line-clamp-1",
+              )}
+            >
+              {source.text}
+            </p>
+          )}
+          {expanded && (
+            <div className="space-y-2">
+              {paragraphs.map((para, index) => (
+                <p
+                  key={`paragraph-${index + 1}`}
+                  className={cn(
+                    "text-xs text-slate-600 dark:text-slate-400 font-mono leading-relaxed",
+                    !expanded && "line-clamp-1",
+                  )}
+                >
+                  {para}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </button>

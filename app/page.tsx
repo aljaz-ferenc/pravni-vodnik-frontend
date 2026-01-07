@@ -1,18 +1,19 @@
 "use client";
 
+import { SelectGroup } from "@radix-ui/react-select";
+import Image from "next/image";
+import { BsInfoCircleFill } from "react-icons/bs";
+import { MdOutlineTune } from "react-icons/md";
 import {
   Select,
+  SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
-  SelectContent,
-  SelectSeparator,
 } from "@/components/ui/select";
-import { SelectGroup } from "@radix-ui/react-select";
-import { MdOutlineTune } from "react-icons/md";
-import { BsInfoCircleFill } from "react-icons/bs";
+import { lawIdMap } from "@/lib/lawIdMap";
 import QueryInput from "./_components/QueryInput";
-import Image from "next/image";
 
 export default function Home() {
   return (
@@ -50,9 +51,11 @@ export default function Home() {
                     <SelectGroup>
                       <SelectItem value="all">Vsa zakonodaja</SelectItem>
                       <SelectSeparator />
-                      <SelectItem value="ustava">
-                        Ustava Republike Slovenije
-                      </SelectItem>
+                      {Object.entries(lawIdMap).map(([lawId, label]) => (
+                        <SelectItem key={lawId} value={lawId}>
+                          {label}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </SelectTrigger>
