@@ -51,7 +51,6 @@ export default async function DocumentPage(
           currentVersion={+version}
           title={`# ${currentVersionDoc.title}`}
         />
-
         <div className="relative flex w-full">
           <article className="flex-1 bg-slate-800/50 p-8 md:p-12  lg:border-b-0 lg:border-r border-border ">
             <div className="prose prose-invert min-w-full">

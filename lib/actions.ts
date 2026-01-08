@@ -8,7 +8,8 @@ import type { Article, Document } from "./types";
 const BASE_URL = process.env.BASE_URL || "http://localhost:8000";
 
 export type QueryResponse = {
-  documentId: string;
+  documentId: string | undefined;
+  error: string;
 };
 
 export async function queryRAG(

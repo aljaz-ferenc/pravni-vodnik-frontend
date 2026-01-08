@@ -8,7 +8,7 @@ const navItems = [
 
 export default function Navigation() {
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-6 py-3">
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-6 py-3">
       <div className="flex items-center gap-3">
         <Image src="/logo.png" width={30} alt="logo" height={30} />
         <nav className="hidden md:flex gap-1">

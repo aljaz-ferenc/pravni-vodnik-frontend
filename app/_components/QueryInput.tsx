@@ -2,6 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import type { Dispatch, SetStateAction } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -17,7 +18,17 @@ const formSchema = z.object({
     .max(500, { error: "Max 500 characters" }),
 });
 
-export default function QueryInput() {
+type QueryInputProps = {
+  setIsPending: Dispatch<SetStateAction<boolean>>;
+  setUnrelatedShown: Dispatch<SetStateAction<boolean>>;
+  unrelatedShown: boolean;
+};
+
+export default function QueryInput({
+  setIsPending,
+  setUnrelatedShown,
+  unrelatedShown,
+}: QueryInputProps) {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
@@ -28,7 +39,15 @@ export default function QueryInput() {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const query = data.query.trim();
     try {
+      setUnrelatedShown(false);
+      setIsPending(true);
       const response = await queryRAG(query);
+
+      if (response.error === "unrelated") {
+        setUnrelatedShown(true);
+        return;
+      }
+      setUnrelatedShown(false);
       router.push(`/documents/${response.documentId}?version=1`);
     } catch (err) {
       if (err instanceof Error) {
@@ -36,6 +55,8 @@ export default function QueryInput() {
       } else {
         toast.error("Nekaj je šlo narobe. Poskusite ponovno.");
       }
+    } finally {
+      setIsPending(false);
     }
   }
 
@@ -46,13 +67,18 @@ export default function QueryInput() {
           name="query"
           control={form.control}
           render={({ field, fieldState }) => (
-            <Field className="w-full">
+            <Field
+              className="w-full"
+              onChange={() => {
+                if (unrelatedShown) setUnrelatedShown(false);
+              }}
+            >
               <Textarea
                 aria-invalid={!!fieldState.error}
                 {...field}
                 spellCheck={false}
                 className="w-full border-none placeholder-muted-foreground px-6 py-6 focus:ring-0 font-light"
-                placeholder="Opišite svoj pravni problem..."
+                placeholder="Vaše pravno vprašanje..."
               />
               <FieldError errors={[fieldState.error]} />
             </Field>

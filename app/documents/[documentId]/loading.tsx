@@ -1,71 +1,31 @@
-import { Check, Gavel } from "lucide-react";
+import { IoDocumentOutline } from "react-icons/io5";
 
 export default function LoadingQuery() {
   return (
-    <main className="flex-1 flex flex-col items-center justify-center relative w-full h-screen pt-16">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-400/5 dark:bg-blue-600/10 rounded-full blur-[120px]"></div>
+    <main
+      aria-live="polite"
+      className="h-screen flex flex-col items-center justify-center p-6 relative"
+    >
+      <div className="flex flex-col items-center max-w-[480px] w-full gap-10">
+        <div className="relative flex items-center justify-center size-32">
+          <div className="absolute inset-0 rounded-full border-[6px] border-slate-800"></div>
+          <div className="absolute inset-0 rounded-full border-[6px] border-transparent border-t-primary animate-spin"></div>
+          <div className="flex items-center justify-center rounded-full size-16 shadow-lg z-10">
+            <IoDocumentOutline size={50} />
+          </div>
+        </div>
+        <div className="flex flex-col items-center gap-3 text-center animate-pulse">
+          <h1 className="text-2xl md:text-3xl font-bold leading-tight tracking-tight text-text-main-dark">
+            Prenašam dokument...
+          </h1>
+          <p className="text-base font-medium text-text-sub-dark">
+            Prosimo, počakajte trenutek.
+          </p>
+        </div>
       </div>
-      <div className="relative z-10 w-full max-w-md px-6 flex flex-col items-center">
-        <div className="relative mb-10">
-          <div className="h-20 w-20 rounded-full border-[6px] border-slate-200 dark:border-slate-800"></div>
-          <div className="absolute top-0 left-0 h-20 w-20 rounded-full border-[6px] border-primary border-t-transparent animate-spin"></div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Gavel />
-          </div>
-        </div>
-        <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-2 text-center tracking-tight">
-          Analiziram vaše vprašanje
-        </h1>
-        <p className="text-slate-500 dark:text-slate-400 text-center mb-10 text-sm leading-relaxed max-w-xs">
-          Sistem uporablja napredno RAG tehnologijo za iskanje po slovenski
-          zakonodaji.
-        </p>
-        <div className="w-full bg-white dark:bg-surface-dark/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 backdrop-blur-sm shadow-xl shadow-slate-200/50 dark:shadow-black/30">
-          <div className="flex flex-col gap-6 relative">
-            <div className="absolute left-[19px] top-4 bottom-4 w-[2px] bg-slate-100 dark:bg-slate-800 -z-10"></div>
-            <div className="flex gap-4 items-start group">
-              <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800 shrink-0 transition-colors duration-500">
-                <Check />
-              </div>
-              <div className="pt-2">
-                <p className="text-sm font-bold text-slate-700 dark:text-slate-200">
-                  Razčlenitev vprašanja
-                </p>
-                <p className="text-xs text-slate-400 dark:text-slate-500">
-                  3 ključni pojmi identificirani
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-slate-800 border-2 border-primary shrink-0 shadow-lg shadow-blue-500/20">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-20 animate-ping"></span>
-                <div className="h-2.5 w-2.5 rounded-full bg-primary"></div>
-              </div>
-              <div className="pt-2">
-                <p className="text-sm font-bold text-primary animate-pulse">
-                  Iskanje virov in informacij
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Pregledovanje baze ZGD-1...
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start opacity-40 grayscale">
-              <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0">
-                <Gavel />
-              </div>
-              <div className="pt-2">
-                <p className="text-sm font-bold text-slate-600 dark:text-slate-400">
-                  Priprava odgovora
-                </p>
-                <p className="text-xs text-slate-400 dark:text-slate-500">
-                  Sinteza in navajanje virov
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-[-1]">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl mix-blend-screen opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl mix-blend-screen opacity-20"></div>
       </div>
     </main>
   );
