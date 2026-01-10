@@ -2,7 +2,6 @@
 
 import { SelectGroup } from "@radix-ui/react-select";
 import { AnimatePresence } from "motion/react";
-import Image from "next/image";
 import { useState } from "react";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { MdOutlineTune } from "react-icons/md";
@@ -30,21 +29,12 @@ export default function Home() {
   const [documentId, setDocumentId] = useState("");
 
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden font-display selection:bg-primary selection:text-white">
+    <div className="h-full flex flex-col mt-16 overflow-x-hidden font-display selection:bg-primary selection:text-white">
       {isPending && (
         <PendingDialog documentId={documentId} events={progressEvents} />
       )}
       <main className="flex-1 flex flex-col items-center justify-center px-4 md:px-10 pb-20 w-full max-w-5xl mx-auto">
         <div className="text-center mb-10 max-w-2xl">
-          {/* <div className="inline-flex items-center justify-center p-3 mb-6 rounded-2xl border-2 border-border shadow-glow">
-            <Image
-              src="/logo-2.svg"
-              className="scale-200"
-              alt="Logo"
-              width={150}
-              height={150}
-            />
-          </div> */}
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4 leading-tight">
             Vaš osebni{" "}
             <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-blue-400">

@@ -42,8 +42,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${inter.className} antialiased bg-background`}
       >
         <LegalNotice />
-        <Navigation />
         <Toaster />
+        <Navigation />
         {children}
       </body>
     </html>

@@ -2,7 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { type Dispatch, type SetStateAction, useEffect } from "react";
+import { type Dispatch, type SetStateAction, useEffect, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -44,6 +44,8 @@ export default function QueryInput({
     },
   });
 
+  const isEventSrouceTerminatedRef = useRef(false);
+
   useEffect(() => {
     return () => {
       setIsPending(false);
@@ -61,18 +63,17 @@ export default function QueryInput({
       const url = `http://127.0.0.1:8000/query?query=${encodeURIComponent(query)}`;
       const eventSource = new EventSource(url);
 
-      eventSource.onmessage = (event) => {
-        console.log(event);
-      };
-
       eventSource.addEventListener("progress", (event) => {
         const data = JSON.parse(event.data);
 
         const validation = progressUpdateDataSchema.safeParse(data);
 
         if (!validation.success) {
-          console.log(validation.error);
-          throw new Error(validation.error.message);
+          console.error(validation.error);
+          toast.error("Napaka v odgovoru strežnika");
+          eventSource.close();
+          setIsPending(false);
+          return;
         }
 
         const { step, message } = validation.data;
@@ -81,13 +82,19 @@ export default function QueryInput({
       });
 
       eventSource.addEventListener("done", (event) => {
+        eventSource.close();
+        isEventSrouceTerminatedRef.current = true;
+
         data = JSON.parse(event.data);
 
         const validation = doneEventDataSchema.safeParse(data);
 
         if (!validation.success) {
-          console.log(validation.error);
-          throw new Error(validation.error.message);
+          console.error(validation.error);
+          toast.error("Napaka v odgovoru strežnika");
+          eventSource.close();
+          setIsPending(false);
+          return;
         }
 
         if (!validation.data.success) {
@@ -109,10 +116,31 @@ export default function QueryInput({
         ]);
       });
 
-      eventSource.onerror = (err) => {
-        console.warn("SSE network/error:", err);
+      eventSource.addEventListener("error", (event) => {
+        if (
+          eventSource.readyState === EventSource.CLOSED ||
+          isEventSrouceTerminatedRef.current
+        ) {
+          eventSource.close();
+          return;
+        }
+        console.error("Server error event:", event);
+        toast.error("Napaka pri obdelavi poizvedbe");
+        setIsPending(false);
         eventSource.close();
+      });
+
+      eventSource.onerror = (err) => {
+        if (
+          eventSource.readyState === EventSource.CLOSED ||
+          isEventSrouceTerminatedRef.current
+        ) {
+          eventSource.close();
+          return;
+        }
+        console.warn("SSE network/error:", err);
         toast.error("Napaka pri vzpostavljanju povezave");
+        setIsPending(false);
       };
     } catch (err) {
       setIsPending(false);
