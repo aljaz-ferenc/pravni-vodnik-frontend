@@ -1,5 +1,6 @@
 "use client";
 
+import { format } from "date-fns";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
@@ -54,7 +55,8 @@ export default function DocumentsListItem({ document }: DocumentProps) {
             </span>
             <span className="text-[10px] text-muted-foreground dark:text-slate-500 flex items-center gap-1 ml-1">
               <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
-              TODO: Pred 20 minutami
+              {lastVersion.created_at &&
+                format(new Date(lastVersion.created_at), "dd. MM. yyyy")}
             </span>
           </div>
           <Link

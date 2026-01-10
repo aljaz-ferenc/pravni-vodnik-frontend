@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import FollowUp from "@/app/_components/FollowUp";
@@ -34,11 +35,19 @@ export default async function DocumentPage(
   const sp = await searchParams;
   const { version } = sp;
 
+  const document = await getDocument(documentId);
+
+  if (!document) throw new Error("Dokument ne obstaja");
+
+  if (!version) {
+    const versionsCount = document.versions.length;
+    redirect(`/documents/${documentId}?version=${versionsCount}`);
+  }
+
   if (!Number(version as string) || !version) {
     throw new Error("Version invalid");
   }
 
-  const document = await getDocument(documentId);
   const currentVersionDoc = document.versions[+version - 1];
   const sources = await getArticles(currentVersionDoc.sources);
 

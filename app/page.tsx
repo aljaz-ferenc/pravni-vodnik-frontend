@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { lawIdMap } from "@/lib/lawIdMap";
+import type { ProgressUpdateData } from "@/lib/types";
 import PendingDialog from "./_components/PendingDialog";
 import QueryInput from "./_components/QueryInput";
 import SupportedLaws from "./_components/SupportedLaws";
@@ -23,10 +24,16 @@ import UnrelatedAlert from "./_components/UnrelatedAlert";
 export default function Home() {
   const [unrelatedAlertShown, setUnrelatedAlertShown] = useState(false);
   const [isPending, setIsPending] = useState(false);
+  const [progressEvents, setProgressEvents] = useState<ProgressUpdateData[]>(
+    [],
+  );
+  const [documentId, setDocumentId] = useState("");
 
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden font-display selection:bg-primary selection:text-white">
-      {isPending && <PendingDialog />}
+      {isPending && (
+        <PendingDialog documentId={documentId} events={progressEvents} />
+      )}
       <main className="flex-1 flex flex-col items-center justify-center px-4 md:px-10 pb-20 w-full max-w-5xl mx-auto">
         <div className="text-center mb-10 max-w-2xl">
           {/* <div className="inline-flex items-center justify-center p-3 mb-6 rounded-2xl border-2 border-border shadow-glow">
@@ -52,9 +59,11 @@ export default function Home() {
         <SupportedLaws />
         <div className="w-full max-w-3xl relative group z-10">
           <QueryInput
+            setProgressEvents={setProgressEvents}
             unrelatedShown={unrelatedAlertShown}
             setUnrelatedShown={setUnrelatedAlertShown}
             setIsPending={setIsPending}
+            setDocumentId={setDocumentId}
           />
           <AnimatePresence mode="wait">
             {unrelatedAlertShown && (

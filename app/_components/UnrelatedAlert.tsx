@@ -11,7 +11,7 @@ export default function UnrelatedAlert({ setShown }: UnrelatedAlertProps) {
   return (
     <motion.div
       className="mt-4 animate-[fadeIn_0.5s_ease-out]"
-      animate={{ opacity: 1, height: "6rem" }}
+      animate={{ opacity: 1, height: "100%" }}
       initial={{ opacity: 0, height: 0 }}
       exit={{ opacity: 0, height: 0 }}
     >

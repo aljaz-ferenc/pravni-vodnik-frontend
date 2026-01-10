@@ -39,7 +39,7 @@ export async function getDocument(documentId: string) {
 
   if (!document) throw new Error("Dokument ne obstaja");
 
-  return JSON.parse(JSON.stringify(document));
+  return JSON.parse(JSON.stringify(document)) as Document;
 }
 
 export async function getArticles(ids: string[]) {

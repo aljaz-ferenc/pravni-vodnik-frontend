@@ -2,7 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import type { Dispatch, SetStateAction } from "react";
+import { type Dispatch, type SetStateAction, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -10,6 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { queryRAG } from "@/lib/actions";
+import {
+  doneEventDataSchema,
+  ProgressUpdateData,
+  progressUpdateDataSchema,
+} from "@/lib/types";
 
 const formSchema = z.object({
   query: z
@@ -22,41 +27,97 @@ type QueryInputProps = {
   setIsPending: Dispatch<SetStateAction<boolean>>;
   setUnrelatedShown: Dispatch<SetStateAction<boolean>>;
   unrelatedShown: boolean;
+  setProgressEvents: Dispatch<SetStateAction<ProgressUpdateData[]>>;
+  setDocumentId: Dispatch<SetStateAction<string>>;
 };
 
 export default function QueryInput({
   setIsPending,
   setUnrelatedShown,
   unrelatedShown,
+  setProgressEvents,
+  setDocumentId,
 }: QueryInputProps) {
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       query: "",
     },
   });
 
+  useEffect(() => {
+    return () => {
+      setIsPending(false);
+      form.reset();
+    };
+  }, [setIsPending, form]);
+
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const query = data.query.trim();
-    try {
-      setUnrelatedShown(false);
-      setIsPending(true);
-      const response = await queryRAG(query);
+    setUnrelatedShown(false);
+    setIsPending(true);
+    setProgressEvents([]);
 
-      if (response.error === "unrelated") {
-        setUnrelatedShown(true);
-        return;
-      }
-      setUnrelatedShown(false);
-      router.push(`/documents/${response.documentId}?version=1`);
+    try {
+      const url = `http://127.0.0.1:8000/query?query=${encodeURIComponent(query)}`;
+      const eventSource = new EventSource(url);
+
+      eventSource.onmessage = (event) => {
+        console.log(event);
+      };
+
+      eventSource.addEventListener("progress", (event) => {
+        const data = JSON.parse(event.data);
+
+        const validation = progressUpdateDataSchema.safeParse(data);
+
+        if (!validation.success) {
+          console.log(validation.error);
+          throw new Error(validation.error.message);
+        }
+
+        const { step, message } = validation.data;
+
+        setProgressEvents((prev) => [...prev, { step, message }]);
+      });
+
+      eventSource.addEventListener("done", (event) => {
+        data = JSON.parse(event.data);
+
+        const validation = doneEventDataSchema.safeParse(data);
+
+        if (!validation.success) {
+          console.log(validation.error);
+          throw new Error(validation.error.message);
+        }
+
+        if (!validation.data.success) {
+          setIsPending(false);
+          switch (validation.data.reason) {
+            case "unrelated_query":
+              setUnrelatedShown(true);
+              break;
+            case "mongo_error":
+              toast.error("Napaka pri shranjevanju dokumenta");
+          }
+          return;
+        }
+
+        setDocumentId(validation.data.document_id);
+        setProgressEvents((prev) => [
+          ...prev,
+          { step: "done", message: "done" },
+        ]);
+      });
+
+      eventSource.onerror = (err) => {
+        console.warn("SSE network/error:", err);
+        eventSource.close();
+        toast.error("Napaka pri vzpostavljanju povezave");
+      };
     } catch (err) {
-      if (err instanceof Error) {
-        toast.error(err.message);
-      } else {
-        toast.error("Nekaj je šlo narobe. Poskusite ponovno.");
-      }
-    } finally {
       setIsPending(false);
+      if (err instanceof Error) toast.error(err.message);
+      else toast.error("Nekaj je šlo narobe. Poskusite ponovno.");
     }
   }
 
