@@ -1,5 +1,6 @@
 import { strict } from "assert";
 import type { ObjectId } from "mongodb";
+import { Dispatch, SetStateAction } from "react";
 import z, { boolean } from "zod";
 
 export type DocumentVersion = {
@@ -38,4 +39,24 @@ export const doneEventDataSchema = z.object({
   document_id: z.string(),
 });
 
+const issueSchema = z.union([
+  z.literal("unrelated_query"),
+  z.literal("low_confidence"),
+]);
+
+export const issueEventDataSchema = z.object({
+  step: z.string(),
+  issue: issueSchema,
+});
+
+export type Issue = z.infer<typeof issueSchema>;
+
+export type IssueData = z.infer<typeof issueEventDataSchema>;
+
 export type DoneEventData = z.infer<typeof doneEventDataSchema>;
+
+export type AlertReason = Issue | null;
+
+export type AlertShownState = { shown: boolean; reason: AlertReason };
+
+export type SetAlertShownAction = Dispatch<SetStateAction<AlertShownState>>;

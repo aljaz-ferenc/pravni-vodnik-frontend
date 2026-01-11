@@ -11,9 +11,12 @@ import { Field, FieldError } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { queryRAG } from "@/lib/actions";
 import {
+  AlertShownState,
   doneEventDataSchema,
+  issueEventDataSchema,
   ProgressUpdateData,
   progressUpdateDataSchema,
+  SetAlertShownAction,
 } from "@/lib/types";
 
 const formSchema = z.object({
@@ -25,16 +28,16 @@ const formSchema = z.object({
 
 type QueryInputProps = {
   setIsPending: Dispatch<SetStateAction<boolean>>;
-  setUnrelatedShown: Dispatch<SetStateAction<boolean>>;
-  unrelatedShown: boolean;
+  setAlertShown: SetAlertShownAction;
+  alertShown: AlertShownState;
   setProgressEvents: Dispatch<SetStateAction<ProgressUpdateData[]>>;
   setDocumentId: Dispatch<SetStateAction<string>>;
 };
 
 export default function QueryInput({
   setIsPending,
-  setUnrelatedShown,
-  unrelatedShown,
+  setAlertShown,
+  alertShown,
   setProgressEvents,
   setDocumentId,
 }: QueryInputProps) {
@@ -55,7 +58,7 @@ export default function QueryInput({
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const query = data.query.trim();
-    setUnrelatedShown(false);
+    setAlertShown({ shown: false, reason: null });
     setIsPending(true);
     setProgressEvents([]);
 
@@ -100,11 +103,9 @@ export default function QueryInput({
         if (!validation.data.success) {
           setIsPending(false);
           switch (validation.data.reason) {
-            case "unrelated_query":
-              setUnrelatedShown(true);
-              break;
             case "mongo_error":
               toast.error("Napaka pri shranjevanju dokumenta");
+              break;
           }
           return;
         }
@@ -114,6 +115,30 @@ export default function QueryInput({
           ...prev,
           { step: "done", message: "done" },
         ]);
+      });
+
+      eventSource.addEventListener("issue", (event) => {
+        eventSource.close();
+        isEventSrouceTerminatedRef.current = true;
+        data = JSON.parse(event.data);
+        setIsPending(false);
+
+        const validation = issueEventDataSchema.safeParse(data);
+
+        if (!validation.success) {
+          console.error(validation.error);
+          toast.error("Napaka v odgovoru strežnika");
+          eventSource.close();
+          return;
+        }
+
+        switch (validation.data.issue) {
+          case "low_confidence":
+            setAlertShown({ shown: true, reason: "low_confidence" });
+            break;
+          case "unrelated_query":
+            setAlertShown({ shown: true, reason: "unrelated_query" });
+        }
       });
 
       eventSource.addEventListener("error", (event) => {
@@ -159,7 +184,7 @@ export default function QueryInput({
             <Field
               className="w-full"
               onChange={() => {
-                if (unrelatedShown) setUnrelatedShown(false);
+                if (alertShown) setAlertShown({ shown: false, reason: null });
               }}
             >
               <Textarea

@@ -14,14 +14,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { lawIdMap } from "@/lib/lawIdMap";
-import type { ProgressUpdateData } from "@/lib/types";
+import type { AlertShownState, ProgressUpdateData } from "@/lib/types";
+import Alert from "./_components/Alert";
 import PendingDialog from "./_components/PendingDialog";
 import QueryInput from "./_components/QueryInput";
 import SupportedLaws from "./_components/SupportedLaws";
-import UnrelatedAlert from "./_components/UnrelatedAlert";
 
 export default function Home() {
-  const [unrelatedAlertShown, setUnrelatedAlertShown] = useState(false);
+  const [alertShown, setAlertShown] = useState<AlertShownState>({
+    shown: false,
+    reason: null,
+  });
   const [isPending, setIsPending] = useState(false);
   const [progressEvents, setProgressEvents] = useState<ProgressUpdateData[]>(
     [],
@@ -50,14 +53,14 @@ export default function Home() {
         <div className="w-full max-w-3xl relative group z-10">
           <QueryInput
             setProgressEvents={setProgressEvents}
-            unrelatedShown={unrelatedAlertShown}
-            setUnrelatedShown={setUnrelatedAlertShown}
+            alertShown={alertShown}
+            setAlertShown={setAlertShown}
             setIsPending={setIsPending}
             setDocumentId={setDocumentId}
           />
           <AnimatePresence mode="wait">
-            {unrelatedAlertShown && (
-              <UnrelatedAlert setShown={setUnrelatedAlertShown} />
+            {alertShown && (
+              <Alert alertShown={alertShown} setAlertShown={setAlertShown} />
             )}
           </AnimatePresence>
           <div className="mt-8">

@@ -15,7 +15,10 @@ export default function Navigation() {
           <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
           {navItems.map((item) => (
             <div key={item.href} className="flex">
-              <Link href={item.href} className="hover:text-primary">
+              <Link
+                className="px-3 py-1.5 text-sm font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 rounded-md shadow-sm"
+                href={item.href}
+              >
                 {item.label}
               </Link>
               <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
