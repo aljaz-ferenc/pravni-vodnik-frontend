@@ -52,9 +52,10 @@ export default function QueryInput({
   useEffect(() => {
     return () => {
       setIsPending(false);
+      setAlertShown({ shown: false, reason: null });
       form.reset();
     };
-  }, [setIsPending, form]);
+  }, [setIsPending, form, setAlertShown]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const query = data.query.trim();
