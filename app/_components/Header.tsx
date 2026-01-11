@@ -1,6 +1,7 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import VersionSelect from "./VersionSelect";
+
+// import VersionSelect from "./VersionSelect";
 
 type HeaderProps = {
   title: string;
@@ -11,8 +12,8 @@ type HeaderProps = {
 
 export default function Header({
   title,
-  versions,
-  currentVersion,
+  // versions,
+  // currentVersion,
   query,
 }: HeaderProps) {
   return (
@@ -27,7 +28,7 @@ export default function Header({
         <div className="prose prose-invert">
           <Markdown remarkPlugins={[remarkGfm]}>{title}</Markdown>
         </div>
-        <VersionSelect currentVersion={currentVersion} versions={versions} />
+        {/* <VersionSelect currentVersion={currentVersion} versions={versions} /> */}
       </div>
     </div>
   );

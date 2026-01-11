@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { type Dispatch, type SetStateAction, useEffect, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -9,7 +8,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
-import { queryRAG } from "@/lib/actions";
+import { updateTagFromClient } from "@/lib/actions";
 import {
   AlertShownState,
   doneEventDataSchema,
@@ -50,6 +49,7 @@ export default function QueryInput({
   const isEventSrouceTerminatedRef = useRef(false);
 
   useEffect(() => {
+    form.reset();
     return () => {
       setIsPending(false);
       setAlertShown({ shown: false, reason: null });
@@ -112,6 +112,7 @@ export default function QueryInput({
         }
 
         setDocumentId(validation.data.document_id);
+        updateTagFromClient("documents");
         setProgressEvents((prev) => [
           ...prev,
           { step: "done", message: "done" },

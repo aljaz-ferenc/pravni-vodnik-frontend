@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import {
-  Crimson_Pro,
-  Geist,
-  Geist_Mono,
-  Inter,
-  Libre_Baskerville,
-  Merriweather,
-} from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import { Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import LegalNotice from "./_components/LegalNotice";
 import Navigation from "./_components/Navigation";
@@ -43,7 +37,9 @@ export default function RootLayout({
       >
         <LegalNotice />
         <Toaster />
-        <Navigation />
+        <Suspense>
+          <Navigation />
+        </Suspense>
         {children}
       </body>
     </html>

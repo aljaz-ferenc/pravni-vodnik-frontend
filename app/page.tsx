@@ -2,6 +2,7 @@
 
 import { SelectGroup } from "@radix-ui/react-select";
 import { AnimatePresence } from "motion/react";
+import Image from "next/image";
 import { useState } from "react";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { MdOutlineTune } from "react-icons/md";
@@ -37,14 +38,31 @@ export default function Home() {
         <PendingDialog documentId={documentId} events={progressEvents} />
       )}
       <main className="flex-1 flex flex-col items-center justify-center px-4 md:px-10 pb-20 w-full max-w-5xl mx-auto">
-        <div className="text-center mb-10 max-w-2xl">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4 leading-tight">
+        <div className="flex flex-col items-center gap-4 mb-8 border-b pb-4 w-full">
+          <div className="flex items-center gap-4">
+            <Image
+              height={50}
+              width={100}
+              src="/logo1.svg"
+              alt="logo"
+              className="w-15 md:w-25"
+            />
+            <h1 className="md:text-5xl text-3xl uppercase font-extrabold tracking-wider">
+              <span className="text-white">pravni</span>
+
+              <br />
+              <span className="text-primary">vodnik</span>
+            </h1>
+          </div>
+          <h2 className="text-lg md:text-2xl font-semibold tracking-tight text-white leading-tight">
             Vaš osebni{" "}
             <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-blue-400">
               pravni svetovalec
             </span>
-          </h1>
-          <p className="text-lg text-muted-foreground font-light">
+          </h2>
+        </div>
+        <div className="text-center mb-10 max-w-2xl">
+          <p className="md:text-lg text-md text-muted-foreground font-light">
             Zanesljivi odgovori na vprašanja o slovenskih zakonih, predpisih in
             pravnih postopkih.
           </p>

@@ -1,7 +1,7 @@
 "use server";
 
 import { ObjectId } from "mongodb";
-import { updateTag } from "next/cache";
+import { revalidateTag, updateTag } from "next/cache";
 import clientPromise from "./mongo";
 import type { Article, Document } from "./types";
 
@@ -72,4 +72,8 @@ export async function deleteDocument(documentId: string) {
 
   updateTag("documents");
   return result?._id.toString();
+}
+
+export async function updateTagFromClient(tag: string) {
+  updateTag(tag);
 }

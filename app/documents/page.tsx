@@ -51,7 +51,7 @@ export default async function DocumentsPage() {
             </div>
             <div className="text-center max-w-sm mx-auto">
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
-                Nimate še shranjenih dokumentov
+                Nimate shranjenih dokumentov
               </h3>
               {/* <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-8">
                 Ko boste shranili svojo prvo poizvedbo, se bo pojavila tukaj.

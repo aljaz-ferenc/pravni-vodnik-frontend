@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Nova poizvedba" },
@@ -7,21 +11,26 @@ const navItems = [
 ];
 
 export default function Navigation() {
+  const pathname = usePathname();
+
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-6 py-3">
-      <div className="flex items-center gap-3">
-        <Image src="/logo.png" width={30} alt="logo" height={30} />
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-slate-900/80 backdrop-blur-md px-6 py-3">
+      <div className="flex items-center gap-5">
+        <Image src="/logo1.svg" width={30} alt="logo" height={30} />
         <nav className="hidden md:flex gap-1">
-          <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
           {navItems.map((item) => (
             <div key={item.href} className="flex">
               <Link
-                className="px-3 py-1.5 text-sm font-bold text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 rounded-md shadow-sm"
+                className={cn(
+                  "px-3 py-1.5 text-sm font-bold text-muted-foreground hover:text-foreground",
+                  pathname === item.href &&
+                    "text-foreground shadow-sm bg-primary/10",
+                )}
                 href={item.href}
               >
                 {item.label}
               </Link>
-              <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
+              <div className="h-full w-px bg-slate-700 mx-2"></div>
             </div>
           ))}
         </nav>

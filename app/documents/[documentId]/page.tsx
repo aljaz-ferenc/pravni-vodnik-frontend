@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import FollowUp from "@/app/_components/FollowUp";
+// import FollowUp from "@/app/_components/FollowUp";
 import Header from "@/app/_components/Header";
 import Sources from "@/app/_components/Sources";
 import { getArticles, getDocument } from "@/lib/actions";
@@ -63,13 +63,16 @@ export default async function DocumentPage(
         <div className="relative flex w-full">
           <article className="flex-1 bg-slate-800/50 p-8 md:p-12  lg:border-b-0 lg:border-r border-border ">
             <div className="prose prose-invert min-w-full">
-              <Markdown remarkPlugins={[remarkGfm]}>
+              <Markdown
+                remarkPlugins={[remarkGfm]}
+                components={{ h1: () => null }}
+              >
                 {currentVersionDoc.content}
               </Markdown>
             </div>
           </article>
           <div className="max-w-100">
-            <FollowUp />
+            {/* <FollowUp /> */}
             <Sources sources={sources} />
           </div>
         </div>
