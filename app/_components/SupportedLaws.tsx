@@ -20,7 +20,7 @@ export default function SupportedLaws() {
       <div className="flex flex-wrap justify-center gap-2 md:gap-3">
         {Object.entries(lawIdMap).map(([lawId, label], index) => (
           <Link
-            href={lawUrls[lawId]}
+            href={lawUrls[lawId as keyof typeof lawUrls]}
             target="_blank"
             key={lawId}
             className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs md:text-sm font-medium text-slate-300 shadow-sm hover:border-primary/30 hover:bg-primary/10 transition-all"
