@@ -50,6 +50,7 @@ export async function getAllDocuments() {
     if (e instanceof Error) {
       console.log(e.message);
     }
+    return [];
   }
 }
 
