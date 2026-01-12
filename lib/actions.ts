@@ -1,11 +1,13 @@
 "use server";
 
 import { ObjectId } from "mongodb";
-import { revalidateTag, updateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import clientPromise from "./mongo";
 import type { Article, Document } from "./types";
 
-const BASE_URL = process.env.BASE_URL || "http://localhost:8000";
+const BASE_URL = process.env.BASE_URL;
+
+if (!BASE_URL) throw new Error("Missing BASE_URL env");
 
 export type QueryResponse = {
   documentId: string | undefined;

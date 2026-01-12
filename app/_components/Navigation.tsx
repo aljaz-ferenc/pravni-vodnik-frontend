@@ -16,7 +16,7 @@ export default function Navigation() {
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-slate-900/80 backdrop-blur-md px-6 py-3">
       <div className="flex items-center gap-5">
-        <Image src="/logo1.svg" width={30} alt="logo" height={30} />
+        <Image src="/logo.svg" width={30} alt="logo" height={30} />
         <nav className="hidden md:flex gap-1">
           {navItems.map((item) => (
             <div key={item.href} className="flex">

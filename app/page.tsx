@@ -43,7 +43,7 @@ export default function Home() {
             <Image
               height={50}
               width={100}
-              src="/logo1.svg"
+              src="/logo.svg"
               alt="logo"
               className="w-15 md:w-25"
             />

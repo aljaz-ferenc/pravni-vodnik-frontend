@@ -9,8 +9,6 @@ if (!uri) {
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-// In development, use a global variable so we don’t create
-// a new connection on every hot reload
 declare global {
   // eslint-disable-next-line no-var
   var _mongoClientPromise: Promise<MongoClient> | undefined;
@@ -23,7 +21,6 @@ if (process.env.NODE_ENV === "development") {
   }
   clientPromise = global._mongoClientPromise;
 } else {
-  // In production, create a new client
   client = new MongoClient(uri);
   clientPromise = client.connect();
 }
