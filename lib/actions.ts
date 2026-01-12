@@ -14,25 +14,6 @@ export type QueryResponse = {
   error: string;
 };
 
-export async function queryRAG(
-  query: string,
-  lawId?: string,
-): Promise<QueryResponse> {
-  const response = await fetch(`${BASE_URL}/query`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query, lawId }),
-  });
-  if (!response.ok) {
-    throw new Error("Nekaj je šlo narobe. Poskusite ponovno.");
-  }
-  const data = await response.json();
-  updateTag("documents");
-  return data;
-}
-
 export async function getDocument(documentId: string) {
   const client = await clientPromise;
   const db = client.db("pravni-vodnik");
@@ -56,14 +37,20 @@ export async function getArticles(ids: string[]) {
 }
 
 export async function getAllDocuments() {
-  const client = await clientPromise;
-  const db = client.db("pravni-vodnik");
-  const col = await db.collection<Document>("documents");
-  const articles = await col.find().toArray();
+  try {
+    const client = await clientPromise;
+    const db = client.db("pravni-vodnik");
+    const col = await db.collection<Document>("documents");
+    const articles = await col.find().toArray();
 
-  if (!articles) throw new Error("Viri ne obstajajo");
+    if (!articles) throw new Error("Viri ne obstajajo");
 
-  return JSON.parse(JSON.stringify(articles)) as Document[];
+    return JSON.parse(JSON.stringify(articles)) as Document[];
+  } catch (e) {
+    if (e instanceof Error) {
+      console.log(e.message);
+    }
+  }
 }
 
 export async function deleteDocument(documentId: string) {
