@@ -1,9 +1,10 @@
 "use client";
 
 import { format } from "date-fns";
-import { X } from "lucide-react";
+import { Ellipsis, Hamburger, Menu, Trash, X } from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
+import { GiHamburger } from "react-icons/gi";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +15,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { deleteDocument } from "@/lib/actions";
 import type { Document as TDocument } from "@/lib/types";
 
@@ -29,7 +42,6 @@ export default function DocumentsListItem({ document }: DocumentProps) {
   function onDelete() {
     startTransition(async () => {
       try {
-        console.log("deleting: ", document._id);
         await deleteDocument(document._id.toString());
         setDeleteDialogOpen(false);
       } catch (err) {
@@ -67,15 +79,33 @@ export default function DocumentsListItem({ document }: DocumentProps) {
             </h3>
           </Link>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Ellipsis />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-background w-min p-0">
+            <DropdownMenuGroup>
+              <DropdownMenuItem className="bg-background hover:!bg-background">
+                <Button
+                  onClick={() => setDeleteDialogOpen((prev) => !prev)}
+                  variant="ghost"
+                  className="flex gap-2 justify-between w-full items-center hover:!bg-destructive/50 text-foreground cursor-pointer"
+                >
+                  Delete <Trash className="text-destructive/50" />
+                </Button>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Dialog onOpenChange={setDeleteDialogOpen} open={deleteDialogOpen}>
-          <DialogTrigger asChild className="cursor-pointer">
+          {/* <DialogTrigger asChild className="cursor-pointer">
             <Button
               variant={"destructive"}
               className="opacity-0 group-hover:opacity-100 transition-opacity"
             >
-              <X />
+              <Ellipsis />
             </Button>
-          </DialogTrigger>
+          </DialogTrigger> */}
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Izbriši dokument</DialogTitle>

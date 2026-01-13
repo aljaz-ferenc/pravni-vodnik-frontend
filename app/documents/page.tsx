@@ -53,11 +53,6 @@ export default async function DocumentsPage() {
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
                 Nimate shranjenih dokumentov
               </h3>
-              {/* <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-8">
-                Ko boste shranili svojo prvo poizvedbo, se bo pojavila tukaj.
-                Sistem vam omogoča shranjevanje pomembnih pravnih mnenj in
-                njihovo sledenje skozi čas.
-              </p> */}
               <Link
                 href="/"
                 className="inline-flex mt-16 items-center justify-center gap-2 px-8 py-3.5 bg-primary hover:bg-primary-dark text-white text-base font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all"
@@ -66,32 +61,6 @@ export default async function DocumentsPage() {
                 Nova poizvedba
               </Link>
             </div>
-            {/* <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
-              <div className="p-4 rounded-lg border border-dashed border-slate-200 dark:border-slate-800 flex items-center gap-4 bg-white/50 dark:bg-slate-800/30">
-                <span className="material-symbols-outlined text-slate-400">
-                  history_edu
-                </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
-                  Sledite zgodovini sprememb
-                </span>
-              </div>
-              <div className="p-4 rounded-lg border border-dashed border-slate-200 dark:border-slate-800 flex items-center gap-4 bg-white/50 dark:bg-slate-800/30">
-                <span className="material-symbols-outlined text-slate-400">
-                  label
-                </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
-                  Kategorizirajte poizvedbe
-                </span>
-              </div>
-              <div className="p-4 rounded-lg border border-dashed border-slate-200 dark:border-slate-800 flex items-center gap-4 bg-white/50 dark:bg-slate-800/30">
-                <span className="material-symbols-outlined text-slate-400">
-                  verified
-                </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
-                  Preverjena zakonodaja
-                </span>
-              </div>
-            </div> */}
           </div>
         )}
       </div>
