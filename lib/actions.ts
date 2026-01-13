@@ -15,11 +15,6 @@ export type QueryResponse = {
 };
 
 export async function getDocument(documentId: string) {
-  try {
-    new ObjectId(documentId);
-  } catch {
-    return null;
-  }
   const client = await clientPromise;
   const db = client.db("pravni-vodnik");
   const col = await db.collection<Document>("documents");
