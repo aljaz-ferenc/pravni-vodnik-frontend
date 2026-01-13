@@ -33,7 +33,7 @@ export default function Home() {
   const [documentId, setDocumentId] = useState("");
 
   return (
-    <div className="h-full flex flex-col mt-16 overflow-x-hidden font-display selection:bg-primary selection:text-white">
+    <div className="h-full flex flex-col md:mt-16 mt-8 overflow-x-hidden font-display selection:bg-primary selection:text-white">
       {isPending && (
         <PendingDialog documentId={documentId} events={progressEvents} />
       )}
