@@ -49,6 +49,21 @@ export const issueEventDataSchema = z.object({
   issue: issueSchema,
 });
 
+export const serverErrorEventDataSchema = z.object({
+  success: z.boolean(),
+  reason: z.string(),
+  message: z.string(),
+});
+
+export const graphErrorEventDataSchema = z.object({
+  step: z.string(),
+  message: z.string(),
+});
+
+export type GraphErrorEventData = z.infer<typeof graphErrorEventDataSchema>;
+
+export type ServerErrorEventData = z.infer<typeof serverErrorEventDataSchema>;
+
 export type Issue = z.infer<typeof issueSchema>;
 
 export type IssueData = z.infer<typeof issueEventDataSchema>;

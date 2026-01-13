@@ -1,6 +1,7 @@
 import { ArrowRight, Check, Flag } from "lucide-react";
 import Link from "next/link";
 import type { ProgressUpdateData } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 type PendingDialogProps = {
   events: ProgressUpdateData[];
@@ -14,20 +15,9 @@ export default function PendingDialog({
   return (
     <main className="z-30 flex-1 flex backdrop-blur-2xl flex-col items-center justify-center absolute inset-0 w-full h-screen pt-16">
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-400/5 dark:bg-blue-600/10 rounded-full blur-[120px]"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-blue-400/5 dark:bg-blue-600/10 rounded-full blur-[120px]"></div>
       </div>
       <div className="relative z-10 w-full max-w-md px-6 flex flex-col items-center">
-        {/* <div className="relative mb-10">
-          <div className="h-20 w-20 rounded-full border-[6px] border-border dark:border-slate-800"></div>
-          <div className="absolute top-0 left-0 h-20 w-20 rounded-full border-[6px] border-primary border-t-transparent animate-spin"></div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            {events.at(-1)?.step === "done" ? (
-              <BadgeCheck size={50} />
-            ) : (
-              <Gavel />
-            )}
-          </div>
-        </div> */}
         <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-2 text-center tracking-tight">
           Analiziram vaše vprašanje
         </h1>
@@ -69,24 +59,25 @@ export default function PendingDialog({
                     </div>
                   );
                 }
+                const isDone = index < events.length - 1;
                 return (
                   <div
                     key={`step-${index + 1}`}
-                    className="flex gap-4 items-start opacity-50"
+                    className="flex gap-4 items-start"
                   >
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 shrink-0">
-                      <EventStatusIcon
-                        status={index < events.length - 1 ? "done" : "pending"}
-                      />
+                      <EventStatusIcon status={isDone ? "done" : "pending"} />
                     </div>
                     <div className="flex-1 pt-1.5">
                       <div className="flex justify-between items-center mb-0.5">
-                        <p className="text-sm font-semibold text-slate-700 dark:text-slate-400">
+                        <p
+                          className={cn(
+                            "text-sm font-semibold text-foreground",
+                            isDone && "text-muted-foreground",
+                          )}
+                        >
                           {event.message}
                         </p>
-                        <span className="text-[10px] font-mono text-slate-400">
-                          14:02:03
-                        </span>
                       </div>
                     </div>
                   </div>
@@ -115,7 +106,7 @@ function EventStatusIcon({
 
   if (status === "done") {
     return (
-      <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800 shrink-0 transition-colors duration-500">
+      <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800 shrink-0 transition-colors duration-500 opacity-50">
         <Check />
       </div>
     );

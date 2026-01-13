@@ -1,25 +1,18 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { type Dispatch, type SetStateAction, useEffect, useRef } from "react";
+import { type Dispatch, type SetStateAction, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
-import { updateTagFromClient } from "@/lib/actions";
-import {
-  type AlertShownState,
-  doneEventDataSchema,
-  issueEventDataSchema,
-  type ProgressUpdateData,
-  progressUpdateDataSchema,
-  type SetAlertShownAction,
+import { handleSSE } from "@/lib/sse";
+import type {
+  AlertShownState,
+  ProgressUpdateData,
+  SetAlertShownAction,
 } from "@/lib/types";
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-if (!BASE_URL) throw new Error("Missing NEXT_PUBLIC_BASE_URL");
 
 const formSchema = z.object({
   query: z
@@ -49,8 +42,6 @@ export default function QueryInput({
     },
   });
 
-  const isEventSrouceTerminatedRef = useRef(false);
-
   useEffect(() => {
     form.reset();
     return () => {
@@ -61,122 +52,13 @@ export default function QueryInput({
   }, [setIsPending, form, setAlertShown]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const query = data.query.trim();
-    setAlertShown({ shown: false, reason: null });
-    setIsPending(true);
-    setProgressEvents([]);
-
-    try {
-      const url = `${BASE_URL}/query?query=${encodeURIComponent(query)}`;
-      const eventSource = new EventSource(url);
-
-      eventSource.addEventListener("progress", (event) => {
-        const data = JSON.parse(event.data);
-
-        const validation = progressUpdateDataSchema.safeParse(data);
-
-        if (!validation.success) {
-          console.error(validation.error);
-          toast.error("Napaka v odgovoru strežnika");
-          eventSource.close();
-          setIsPending(false);
-          return;
-        }
-
-        const { step, message } = validation.data;
-
-        setProgressEvents((prev) => [...prev, { step, message }]);
-      });
-
-      eventSource.addEventListener("done", (event) => {
-        eventSource.close();
-        isEventSrouceTerminatedRef.current = true;
-
-        data = JSON.parse(event.data);
-
-        const validation = doneEventDataSchema.safeParse(data);
-
-        if (!validation.success) {
-          console.error(validation.error);
-          toast.error("Napaka v odgovoru strežnika");
-          eventSource.close();
-          setIsPending(false);
-          return;
-        }
-
-        if (!validation.data.success) {
-          setIsPending(false);
-          switch (validation.data.reason) {
-            case "mongo_error":
-              toast.error("Napaka pri shranjevanju dokumenta");
-              break;
-          }
-          return;
-        }
-
-        setDocumentId(validation.data.document_id);
-        updateTagFromClient("documents");
-        setProgressEvents((prev) => [
-          ...prev,
-          { step: "done", message: "done" },
-        ]);
-      });
-
-      eventSource.addEventListener("issue", (event) => {
-        eventSource.close();
-        isEventSrouceTerminatedRef.current = true;
-        data = JSON.parse(event.data);
-        setIsPending(false);
-
-        const validation = issueEventDataSchema.safeParse(data);
-
-        if (!validation.success) {
-          console.error(validation.error);
-          toast.error("Napaka v odgovoru strežnika");
-          eventSource.close();
-          return;
-        }
-
-        switch (validation.data.issue) {
-          case "low_confidence":
-            setAlertShown({ shown: true, reason: "low_confidence" });
-            break;
-          case "unrelated_query":
-            setAlertShown({ shown: true, reason: "unrelated_query" });
-        }
-      });
-
-      eventSource.addEventListener("error", (event) => {
-        if (
-          eventSource.readyState === EventSource.CLOSED ||
-          isEventSrouceTerminatedRef.current
-        ) {
-          eventSource.close();
-          return;
-        }
-        console.error("Server error event:", event);
-        toast.error("Napaka pri obdelavi poizvedbe");
-        setIsPending(false);
-        eventSource.close();
-      });
-
-      eventSource.onerror = (err) => {
-        if (
-          eventSource.readyState === EventSource.CLOSED ||
-          isEventSrouceTerminatedRef.current
-        ) {
-          eventSource.close();
-          return;
-        }
-        console.warn("SSE network/error:", err);
-        toast.error("Napaka pri vzpostavljanju povezave");
-        setIsPending(false);
-      };
-    } catch (err) {
-      setIsPending(false);
-      if (err instanceof Error) toast.error(err.message);
-      else toast.error("Nekaj je šlo narobe. Poskusite ponovno.");
-    }
+    handleSSE(
+      data.query.trim(),
+      setAlertShown,
+      setProgressEvents,
+      setIsPending,
+      setDocumentId,
+    );
   }
 
   return (
