@@ -37,10 +37,12 @@ export default function RootLayout({
       >
         <LegalNotice />
         <Toaster />
-        <Suspense>
-          <Navigation />
-        </Suspense>
-        {children}
+        <div className="min-h-screen flex flex-col flex-1 h-full">
+          <Suspense>
+            <Navigation />
+          </Suspense>
+          {children}
+        </div>
       </body>
     </html>
   );

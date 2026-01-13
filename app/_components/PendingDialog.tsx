@@ -12,6 +12,7 @@ export default function PendingDialog({
   events,
   documentId,
 }: PendingDialogProps) {
+  if (!events.length) return null;
   return (
     <main className="z-30 flex-1 flex backdrop-blur-2xl flex-col items-center justify-center absolute inset-0 w-full h-screen pt-16">
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -27,62 +28,61 @@ export default function PendingDialog({
         </p>
         <div className="w-full border border-border rounded-2xl p-6 backdrop-blur-sm shadow-xl shadow-border/50 dark:shadow-black/30">
           <div className="flex flex-col gap-6 relative">
-            {events.length > 0 &&
-              events.map((event, index) => {
-                if (event.step === "done") {
-                  return (
-                    <div key={`step-${index + 1}`}>
-                      <div className="flex gap-4 items-center p-4 -mx-2 rounded-2xl bg-primary/5 border border-primary/20 shadow-lg shadow-primary/5 animate-glow-primary relative overflow-hidden transition-all duration-700">
-                        <EventStatusIcon status="finish" />
-                        <div className="flex-1 pt-1 items-center">
-                          <div className="flex justify-between mb-0.5">
-                            <p className="text-sm font-bold text-primary dark:text-blue-400">
-                              Dokument je pripravljen
-                            </p>
-                            <span className="text-[10px] font-mono text-primary/70 font-bold uppercase tracking-tight">
-                              Končano
-                            </span>
-                          </div>
+            {events.map((event, index) => {
+              if (event.step === "done") {
+                return (
+                  <div key={`step-${index + 1}`}>
+                    <div className="flex gap-4 items-center p-4 -mx-2 rounded-2xl bg-primary/5 border border-primary/20 shadow-lg shadow-primary/5 animate-glow-primary relative overflow-hidden transition-all duration-700">
+                      <EventStatusIcon status="finish" />
+                      <div className="flex-1 pt-1 items-center">
+                        <div className="flex justify-between mb-0.5">
+                          <p className="text-sm font-bold text-primary dark:text-blue-400">
+                            Dokument je pripravljen
+                          </p>
+                          <span className="text-[10px] font-mono text-primary/70 font-bold uppercase tracking-tight">
+                            Končano
+                          </span>
                         </div>
                       </div>
-                      <div className=" pt-4 flex items-center justify-between">
-                        <Link
-                          href={`/documents/${documentId}`}
-                          className="flex items-center gap-1.5 group cursor-pointer"
-                        >
-                          <span className="text-[10px] font-semibold text-primary">
-                            ODPRI DOKUMENT
-                          </span>
-                          <ArrowRight size={15} color="var(--color-primary)" />
-                        </Link>
-                      </div>
                     </div>
-                  );
-                }
-                const isDone = index < events.length - 1;
-                return (
-                  <div
-                    key={`step-${index + 1}`}
-                    className="flex gap-4 items-start"
-                  >
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 shrink-0">
-                      <EventStatusIcon status={isDone ? "done" : "pending"} />
-                    </div>
-                    <div className="flex-1 pt-1.5">
-                      <div className="flex justify-between items-center mb-0.5">
-                        <p
-                          className={cn(
-                            "text-sm font-semibold text-foreground",
-                            isDone && "text-muted-foreground",
-                          )}
-                        >
-                          {event.message}
-                        </p>
-                      </div>
+                    <div className=" pt-4 flex items-center justify-between">
+                      <Link
+                        href={`/documents/${documentId}`}
+                        className="flex items-center gap-1.5 group cursor-pointer"
+                      >
+                        <span className="text-[10px] font-semibold text-primary">
+                          ODPRI DOKUMENT
+                        </span>
+                        <ArrowRight size={15} color="var(--color-primary)" />
+                      </Link>
                     </div>
                   </div>
                 );
-              })}
+              }
+              const isDone = index < events.length - 1;
+              return (
+                <div
+                  key={`step-${index + 1}`}
+                  className="flex gap-4 items-start"
+                >
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 shrink-0">
+                    <EventStatusIcon status={isDone ? "done" : "pending"} />
+                  </div>
+                  <div className="flex-1 pt-1.5">
+                    <div className="flex justify-between items-center mb-0.5">
+                      <p
+                        className={cn(
+                          "text-sm font-semibold text-foreground",
+                          isDone && "text-muted-foreground",
+                        )}
+                      >
+                        {event.message}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

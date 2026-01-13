@@ -52,16 +52,16 @@ export default async function DocumentPage(
   const sources = await getArticles(currentVersionDoc.sources);
 
   return (
-    <main className="max-w-[1440px] mx-auto flex-1 flex flex-col items-center py-8 px-4 md:px-8">
-      <div className="w-full rounded-xl shadow-2xl shadow-slate-200/50 dark:shadow-black/50 border border-border  overflow-hidden min-h-[85vh]">
+    <main className="max-w-360 mx-auto flex flex-col items-center py-8 px-4 md:px-8 h-full">
+      <div className="w-full rounded-xl shadow-2xl shadow-slate-200/50 dark:shadow-black/50 border border-border  overflow-hidden min-h-full">
         <Header
           query={document.versions[+version - 1].query}
           versions={document.versions.length}
           currentVersion={+version}
           title={`# ${currentVersionDoc.title}`}
         />
-        <div className="relative flex w-full">
-          <article className="flex-1 bg-slate-800/50 p-8 md:p-12  lg:border-b-0 lg:border-r border-border ">
+        <div className="relative flex w-full flex-1 h-full">
+          <article className="flex-1 bg-slate-800/50 p-8 md:p-12  lg:border-b-0 lg:border-r border-border h-full">
             <div className="prose prose-invert min-w-full">
               <Markdown
                 remarkPlugins={[remarkGfm]}
