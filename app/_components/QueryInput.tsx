@@ -10,13 +10,16 @@ import { Field, FieldError } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { updateTagFromClient } from "@/lib/actions";
 import {
-  AlertShownState,
+  type AlertShownState,
   doneEventDataSchema,
   issueEventDataSchema,
-  ProgressUpdateData,
+  type ProgressUpdateData,
   progressUpdateDataSchema,
-  SetAlertShownAction,
+  type SetAlertShownAction,
 } from "@/lib/types";
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+if (!BASE_URL) throw new Error("Missing NEXT_PUBLIC_BASE_URL");
 
 const formSchema = z.object({
   query: z
@@ -64,7 +67,7 @@ export default function QueryInput({
     setProgressEvents([]);
 
     try {
-      const url = `http://127.0.0.1:8000/query?query=${encodeURIComponent(query)}`;
+      const url = `${BASE_URL}/query?query=${encodeURIComponent(query)}`;
       const eventSource = new EventSource(url);
 
       eventSource.addEventListener("progress", (event) => {
